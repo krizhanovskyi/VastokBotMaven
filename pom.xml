@@ -31,7 +31,7 @@
                     <assembleDirectory>target</assembleDirectory>
                     <programs>
                         <program>
-                            <mainClass>vastokBot.Main</mainClass>
+                            <mainClass>vastokbot.Main</mainClass>
                             <name>VastokBot</name>
                         </program>
                     </programs>
