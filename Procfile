@@ -1,1 +1,1 @@
-worker: java -jar target/VastokBot-1.0-SNAPSHOT.jar vastokbot.Main
+worker: sh target/bin/vastokBot

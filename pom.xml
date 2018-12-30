@@ -30,8 +30,8 @@
                     <assembleDirectory>target</assembleDirectory>
                     <programs>
                         <program>
-                            <mainClass>vastokbot.Main</mainClass>
-                            <name>VastokBot</name>
+                            <mainClass>vastokbot.VastokBot</mainClass>
+                            <name>vastokBot</name>
                         </program>
                     </programs>
                 </configuration>

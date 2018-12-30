@@ -1,6 +1,8 @@
 package vastokbot;
 
+import org.telegram.telegrambots.ApiContextInitializer;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
+import org.telegram.telegrambots.meta.TelegramBotsApi;
 import org.telegram.telegrambots.meta.api.methods.AnswerInlineQuery;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
@@ -27,6 +29,16 @@ public class VastokBot extends TelegramLongPollingBot {
         return "624467793:AAEFYTPdSNn_z3Qi5VnL3hkgCkjKDa3X09M";
     }
 
+    public static void main(String[] args) {
+        ApiContextInitializer.init();
+        TelegramBotsApi botsApi = new TelegramBotsApi();
+
+        try {
+            botsApi.registerBot(new VastokBot());
+        } catch (TelegramApiException e) {
+            e.printStackTrace();
+        }
+    }
 
 
     @Override
