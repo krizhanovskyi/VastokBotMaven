@@ -30,7 +30,7 @@
                     <assembleDirectory>target</assembleDirectory>
                     <programs>
                         <program>
-                            <mainClass>main.java.vastokbot.Main</mainClass>
+                            <mainClass>vastokbot.Main</mainClass>
                             <name>VastokBot</name>
                         </program>
                     </programs>
