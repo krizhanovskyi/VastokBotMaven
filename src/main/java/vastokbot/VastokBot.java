@@ -13,13 +13,22 @@ import org.telegram.telegrambots.meta.api.objects.inlinequery.result.InlineQuery
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
+import org.telegram.telegrambots.meta.logging.BotLogger;
 
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.logging.Level;
 
 import static java.lang.Math.toIntExact;
 
 public class VastokBot extends TelegramLongPollingBot {
+    public static List<String> photoURLs = new ArrayList<>();
+    public static BotLogger botLogger = new BotLogger();
 
     public String getBotUsername() {
         return "VastokBot";
@@ -32,6 +41,12 @@ public class VastokBot extends TelegramLongPollingBot {
     public static void main(String[] args) {
         ApiContextInitializer.init();
         TelegramBotsApi botsApi = new TelegramBotsApi();
+        try{
+            photoURLs = Files.readAllLines(Paths.get("src/main/java/resources/images.list"), StandardCharsets.UTF_8);
+        }
+        catch (IOException ignored){
+            botLogger.log(Level.WARNING, "Source reading exception", "Exception reading file");
+        }
 
         try {
             botsApi.registerBot(new VastokBot());
@@ -92,24 +107,20 @@ public class VastokBot extends TelegramLongPollingBot {
 
             String query = update.getInlineQuery().getQuery();
 
-            if(query.equals("get")){
-
+            if(query.equals("d")){
+                for (int i = 1; i < 12; i++) {
+                    Collections.shuffle(photoURLs);
+                }
             List<InlineQueryResult> results = new ArrayList<>();
+            for(int i = 1; i<50;i++){
+                results.add(new InlineQueryResultPhoto().setId(String.valueOf(i))
+                        .setPhotoUrl(photoURLs.get(i))
+                        .setThumbUrl(photoURLs.get(i)));
+            }
 
-            InlineQueryResultPhoto photo = new InlineQueryResultPhoto();
-            photo.setId("1");
-            photo.setPhotoUrl("https://picua.org/images/2018/12/30/f07bdb843968ddcb2b7ab18526b5f080.jpg");
-            photo.setThumbUrl("https://picua.org/images/2018/12/30/f07bdb843968ddcb2b7ab18526b5f080.jpg");
-
-            InlineQueryResultPhoto photo2 = new InlineQueryResultPhoto();
-            photo2.setId("2");
-            photo2.setPhotoUrl("https://picua.org/images/2018/12/30/94851f7f03bcd7884f28fc65680175c3.jpg");
-            photo2.setThumbUrl("https://picua.org/images/2018/12/30/94851f7f03bcd7884f28fc65680175c3.jpg");
-
-            results.add(photo);
-            results.add(photo2);
-
-            AnswerInlineQuery answer = new AnswerInlineQuery();
+            AnswerInlineQuery answer = new AnswerInlineQuery()
+                    .setPersonal(true)
+                    .setCacheTime(20);
             InlineQuery inlineQuery = update.getInlineQuery();
             answer.setInlineQueryId(inlineQuery.getId());
             answer.setResults(results);
