@@ -55,7 +55,6 @@ public class VastokBot extends TelegramLongPollingBot {
         }
     }
 
-
     @Override
     public void onUpdateReceived(Update update) {
 
@@ -77,6 +76,16 @@ public class VastokBot extends TelegramLongPollingBot {
                 // Add it to the message
                 markupInline.setKeyboard(rowsInline);
                 message.setReplyMarkup(markupInline);
+                try {
+                    execute(message); // Sending our message object to user
+                } catch (TelegramApiException e) {
+                    e.printStackTrace();
+                }
+            }
+            else if(update.getMessage().getText().equals("/help")){
+                SendMessage message = new SendMessage() // Create a message object object
+                        .setChatId(chat_id)
+                        .setText("InlineQuery commands:\nd - Photos from dacha");
                 try {
                     execute(message); // Sending our message object to user
                 } catch (TelegramApiException e) {
@@ -130,7 +139,6 @@ public class VastokBot extends TelegramLongPollingBot {
             } catch (TelegramApiException e) {
                 e.printStackTrace();
             }
-
             }
         }
     }
