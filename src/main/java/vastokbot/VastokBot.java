@@ -85,7 +85,7 @@ public class VastokBot extends TelegramLongPollingBot {
             else if(update.getMessage().getText().equals("/help")){
                 SendMessage message = new SendMessage() // Create a message object object
                         .setChatId(chat_id)
-                        .setText("InlineQuery commands:\nd - Photos from dacha");
+                        .setText("InlineQuery commands:\nd - Фото с дачи");
                 try {
                     execute(message); // Sending our message object to user
                 } catch (TelegramApiException e) {
