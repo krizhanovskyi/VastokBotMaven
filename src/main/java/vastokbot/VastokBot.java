@@ -108,7 +108,7 @@ public class VastokBot extends TelegramLongPollingBot {
             String query = update.getInlineQuery().getQuery();
 
             if(query.equals("d")){
-                for (int i = 1; i < 12; i++) {
+                for (int i = 1; i < 25; i++) {
                     Collections.shuffle(photoURLs);
                 }
             List<InlineQueryResult> results = new ArrayList<>();
@@ -119,8 +119,8 @@ public class VastokBot extends TelegramLongPollingBot {
             }
 
             AnswerInlineQuery answer = new AnswerInlineQuery()
-                    .setPersonal(true)
-                    .setCacheTime(20);
+                    .setPersonal(false)
+                    .setCacheTime(0);
             InlineQuery inlineQuery = update.getInlineQuery();
             answer.setInlineQueryId(inlineQuery.getId());
             answer.setResults(results);
