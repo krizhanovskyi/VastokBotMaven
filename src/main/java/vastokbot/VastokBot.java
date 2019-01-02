@@ -125,6 +125,7 @@ public class VastokBot extends TelegramLongPollingBot {
                 results.add(new InlineQueryResultPhoto().setId(String.valueOf(i))
                         .setPhotoUrl(photoURLs.get(i))
                         .setThumbUrl(photoURLs.get(i)));
+                //v2
             }
 
             AnswerInlineQuery answer = new AnswerInlineQuery()
