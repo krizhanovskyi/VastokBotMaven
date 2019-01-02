@@ -27,8 +27,8 @@ import java.util.logging.Level;
 import static java.lang.Math.toIntExact;
 
 public class VastokBot extends TelegramLongPollingBot {
-    public static List<String> photoURLs = new ArrayList<>();
-    public static BotLogger botLogger = new BotLogger();
+    private static List<String> photoURLs = new ArrayList<>();
+    private static BotLogger botLogger = new BotLogger();
 
     public String getBotUsername() {
         return "VastokBot";
@@ -125,6 +125,7 @@ public class VastokBot extends TelegramLongPollingBot {
                 results.add(new InlineQueryResultPhoto().setId(String.valueOf(i))
                         .setPhotoUrl(photoURLs.get(i))
                         .setThumbUrl(photoURLs.get(i)));
+                //
             }
 
             AnswerInlineQuery answer = new AnswerInlineQuery()
