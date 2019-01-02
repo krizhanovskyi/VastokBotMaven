@@ -130,6 +130,7 @@ public class VastokBot extends TelegramLongPollingBot {
             } catch (TelegramApiException e) {
                 e.printStackTrace();
             }
+
             }
         }
     }
