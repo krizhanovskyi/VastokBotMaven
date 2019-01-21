@@ -6,6 +6,7 @@ import org.telegram.telegrambots.meta.TelegramBotsApi;
 import org.telegram.telegrambots.meta.api.methods.AnswerInlineQuery;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
+import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.inlinequery.InlineQuery;
 import org.telegram.telegrambots.meta.api.objects.inlinequery.result.InlineQueryResult;
@@ -29,6 +30,8 @@ import static java.lang.Math.toIntExact;
 public class VastokBot extends TelegramLongPollingBot {
     private static List<String> photoURLs = new ArrayList<>();
     private static BotLogger botLogger = new BotLogger();
+    private static Integer check;
+    private static String shvulya;
 
     public String getBotUsername() {
         return "VastokBot";
@@ -37,6 +40,34 @@ public class VastokBot extends TelegramLongPollingBot {
     public String getBotToken() {
         return "624467793:AAEFYTPdSNn_z3Qi5VnL3hkgCkjKDa3X09M";
     }
+
+    public String getShvulya(String text){
+        StringBuilder result = new StringBuilder();
+        StringBuilder sb = new StringBuilder(text);
+        StringBuilder buffer = new StringBuilder();
+        List<String> list = new ArrayList<>();
+        sb.codePoints()
+                .mapToObj(c -> String.valueOf((char) c).concat(" "))
+                .forEach(buffer::append);
+        list.add(buffer.toString());
+        for (int i = 0; i < sb.length(); i++) {
+            StringBuilder r = new StringBuilder(list.get(list.size()-1));
+            r.append(r.charAt(0));
+            r.append(" ");
+            r.deleteCharAt(0);
+            r.deleteCharAt(0);
+            list.add(r.toString());
+        }
+
+        for (String s:list) {
+            result.append(s+"\n");
+        }
+        if(result.toString().length()<4096)
+        return result.toString();
+        else
+            return "Сообщение получилось слишком длинное: " + result.toString().length() + " символов";
+    }
+
 
     public static void main(String[] args) {
         ApiContextInitializer.init();
@@ -77,7 +108,8 @@ public class VastokBot extends TelegramLongPollingBot {
                 markupInline.setKeyboard(rowsInline);
                 message.setReplyMarkup(markupInline);
                 try {
-                    execute(message); // Sending our message object to user
+                    execute(message);
+                    check=0;// Sending our message object to user
                 } catch (TelegramApiException e) {
                     e.printStackTrace();
                 }
@@ -87,7 +119,38 @@ public class VastokBot extends TelegramLongPollingBot {
                         .setChatId(chat_id)
                         .setText("InlineQuery commands:\nd - Фото с дачи");
                 try {
-                    execute(message); // Sending our message object to user
+                    execute(message);
+                    check=0;// Sending our message object to user
+                } catch (TelegramApiException e) {
+                    e.printStackTrace();
+                }
+            }
+            else if(update.getMessage().getText().equals("/shvulya")){
+                SendMessage message = new SendMessage() // Create a message object object
+                        .setChatId(chat_id)
+                        .setText("Введите новую швулю");
+                try {
+                    execute(message);
+                    check = 1;// Sending our message object to user
+                } catch (TelegramApiException e) {
+                    e.printStackTrace();
+                }
+            }
+            else if(check==1){
+                SendMessage message = new SendMessage().setChatId(chat_id).setText(getShvulya(message_text));
+                try {
+                    execute(message);
+                    check = 0;// Sending our message object to user
+                } catch (TelegramApiException e) {
+                    e.printStackTrace();
+                }
+            }
+            else
+            {
+                SendMessage message = new SendMessage().setChatId(chat_id).setText("Я не смог Вас понять, введите команду");
+                try {
+                    execute(message);
+                    check = 0;// Sending our message object to user
                 } catch (TelegramApiException e) {
                     e.printStackTrace();
                 }
@@ -117,9 +180,8 @@ public class VastokBot extends TelegramLongPollingBot {
             String query = update.getInlineQuery().getQuery();
 
             if(query.equals("d")){
-                for (int i = 1; i < 3; i++) {
-                    Collections.shuffle(photoURLs);
-                }
+
+            Collections.shuffle(photoURLs);
             List<InlineQueryResult> results = new ArrayList<>();
             for(int i = 1; i<50;i++){
                 results.add(new InlineQueryResultPhoto().setId(String.valueOf(i))
