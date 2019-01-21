@@ -6,7 +6,6 @@ import org.telegram.telegrambots.meta.TelegramBotsApi;
 import org.telegram.telegrambots.meta.api.methods.AnswerInlineQuery;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
-import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.inlinequery.InlineQuery;
 import org.telegram.telegrambots.meta.api.objects.inlinequery.result.InlineQueryResult;
@@ -30,8 +29,7 @@ import static java.lang.Math.toIntExact;
 public class VastokBot extends TelegramLongPollingBot {
     private static List<String> photoURLs = new ArrayList<>();
     private static BotLogger botLogger = new BotLogger();
-    private static Integer check;
-    private static String shvulya;
+    private static Integer checkShvulya;
 
     public String getBotUsername() {
         return "VastokBot";
@@ -65,7 +63,8 @@ public class VastokBot extends TelegramLongPollingBot {
         if(result.toString().length()<4096)
         return result.toString();
         else
-            return "Сообщение получилось слишком длинное: " + result.toString().length() + " символов";
+            return "Сообщение получилось слишком длинное: "
+                    + result.toString().length() + " символов. Макс. 4096";
     }
 
 
@@ -89,7 +88,7 @@ public class VastokBot extends TelegramLongPollingBot {
     @Override
     public void onUpdateReceived(Update update) {
 
-        // We check if the update has a message and the message has text
+        // We checkShvulya if the update has a message and the message has text
         if (update.hasMessage() && update.getMessage().hasText()) {
             String message_text = update.getMessage().getText();
             long chat_id = update.getMessage().getChatId();
@@ -109,7 +108,7 @@ public class VastokBot extends TelegramLongPollingBot {
                 message.setReplyMarkup(markupInline);
                 try {
                     execute(message);
-                    check=0;// Sending our message object to user
+                    checkShvulya =0;// Sending our message object to user
                 } catch (TelegramApiException e) {
                     e.printStackTrace();
                 }
@@ -120,7 +119,7 @@ public class VastokBot extends TelegramLongPollingBot {
                         .setText("InlineQuery commands:\nd - Фото с дачи");
                 try {
                     execute(message);
-                    check=0;// Sending our message object to user
+                    checkShvulya =0;
                 } catch (TelegramApiException e) {
                     e.printStackTrace();
                 }
@@ -131,16 +130,16 @@ public class VastokBot extends TelegramLongPollingBot {
                         .setText("Введите новую швулю");
                 try {
                     execute(message);
-                    check = 1;// Sending our message object to user
+                    checkShvulya = 1;// Sending our message object to user
                 } catch (TelegramApiException e) {
                     e.printStackTrace();
                 }
             }
-            else if(check==1){
+            else if(checkShvulya ==1){
                 SendMessage message = new SendMessage().setChatId(chat_id).setText(getShvulya(message_text));
                 try {
                     execute(message);
-                    check = 0;// Sending our message object to user
+                    checkShvulya = 0;// Sending our message object to user
                 } catch (TelegramApiException e) {
                     e.printStackTrace();
                 }
@@ -150,7 +149,7 @@ public class VastokBot extends TelegramLongPollingBot {
                 SendMessage message = new SendMessage().setChatId(chat_id).setText("Я не смог Вас понять, введите команду");
                 try {
                     execute(message);
-                    check = 0;// Sending our message object to user
+                    checkShvulya = 0;// Sending our message object to user
                 } catch (TelegramApiException e) {
                     e.printStackTrace();
                 }
