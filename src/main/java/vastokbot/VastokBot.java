@@ -39,6 +39,20 @@ public class VastokBot extends TelegramLongPollingBot {
         return "624467793:AAEFYTPdSNn_z3Qi5VnL3hkgCkjKDa3X09M";
     }
 
+    public String getOgoo(){
+        final String CONSONANTS = "цкнгшщзхфвпрлджчсмтбй";
+        StringBuilder sb = new StringBuilder();
+        for (Character c: CONSONANTS.toCharArray()) {
+            for (Character ch: CONSONANTS.toCharArray()) {
+                if (c.equals(ch))
+                    continue;
+                sb.append(c).append(ch).append(c).append(c).append("\n");
+            }
+        }
+            return sb.toString();
+    }
+    
+
     public String getShvulya(String text){
         StringBuilder result = new StringBuilder();
         StringBuilder sb = new StringBuilder(text);
@@ -120,6 +134,16 @@ public class VastokBot extends TelegramLongPollingBot {
                 try {
                     execute(message);
                     checkShvulya =0;
+                } catch (TelegramApiException e) {
+                    e.printStackTrace();
+                }
+            }
+            else if(update.getMessage().getText().equals("/ogoo")){
+                SendMessage message = new SendMessage() // Create a message object object
+                        .setChatId(chat_id)
+                        .setText(getOgoo());
+                try {
+                    execute(message);
                 } catch (TelegramApiException e) {
                     e.printStackTrace();
                 }
